@@ -25,7 +25,8 @@ WORKDIR /app/client
 RUN npm ci
 RUN npm run build
 
-# 3. 复制前端构建产物到 Nginx
+# 3. 创建 Nginx 目录并复制前端构建产物
+RUN mkdir -p /usr/share/nginx/html
 RUN rm -rf /usr/share/nginx/html/*
 RUN cp -r /app/client/dist/* /usr/share/nginx/html/
 
