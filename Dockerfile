@@ -3,9 +3,12 @@ FROM node:18-bookworm-slim
 # 设置 npm 镜像源
 RUN npm config set registry https://registry.npmmirror.com
 
-# 安装 Nginx
+# 安装 Nginx 和构建工具（用于编译 better-sqlite3）
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
+    python3 \
+    make \
+    g++ \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
