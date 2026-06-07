@@ -26,6 +26,35 @@
 
 ## 快速开始
 
+### ⚠️ 国内服务器配置（重要）
+
+如果您的服务器在中国大陆，建议先配置 Docker 和 npm 的镜像源以加速下载：
+
+#### 1. 配置 Docker 镜像源
+```bash
+# 创建 Docker 配置目录
+sudo mkdir -p /etc/docker
+
+# 复制镜像源配置
+sudo cp daemon.json /etc/docker/daemon.json
+
+# 重启 Docker 服务
+sudo systemctl restart docker
+
+# 验证配置
+sudo docker info | grep -A 5 "Registry Mirrors"
+```
+
+#### 2. Git 拉取加速（可选）
+```bash
+# 使用 GitHub 镜像加速克隆
+git clone https://ghproxy.com/https://github.com/cq7x/zcglxt.git
+
+# 或使用代理
+git config --global http.proxy http://127.0.0.1:7890
+git config --global https.proxy https://127.0.0.1:7890
+```
+
 ### 方式一：Docker 部署（推荐）
 
 #### 1. 克隆项目
@@ -108,6 +137,8 @@ npm run start
 - `nginx.conf` - Nginx 反向代理配置
 - `start.sh` - 启动脚本
 - `docker-compose.yml` - Docker Compose 配置
+- `daemon.json` - Docker 镜像源配置（国内加速）
+- `.npmrc` - npm 镜像源配置（淘宝镜像）
 
 ### 架构说明
 - 单个 Docker 容器运行
@@ -127,11 +158,15 @@ npm run start
 ```
 zcglxt/
 ├── client/          # 前端项目
+│   └── .npmrc       # 前端 npm 镜像源配置
 ├── server/          # 后端项目
+│   └── .npmrc       # 后端 npm 镜像源配置
 ├── Dockerfile       # 整合 Dockerfile
 ├── nginx.conf       # Nginx 配置
 ├── start.sh         # 启动脚本
 ├── docker-compose.yml
+├── daemon.json      # Docker 镜像源配置
+├── .npmrc           # 根目录 npm 镜像源配置
 ├── .gitignore
 ├── .dockerignore
 ├── package.json     # 根 package.json

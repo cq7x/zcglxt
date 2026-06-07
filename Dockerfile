@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
+# 设置 npm 镜像源（淘宝镜像）
+RUN npm config set registry https://registry.npmmirror.com
+
 # 设置工作目录
 WORKDIR /app
 

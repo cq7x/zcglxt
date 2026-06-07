@@ -1,5 +1,14 @@
 version: '3.8'
 
+# 如果在国内服务器，建议创建 /etc/docker/daemon.json 配置镜像源
+# {
+#   "registry-mirrors": [
+#     "https://docker.m.daocloud.io",
+#     "https://docker.1panel.live"
+#   ]
+# }
+# 然后执行: sudo systemctl restart docker
+
 services:
   # 整合服务：前端 + 后端
   app:
