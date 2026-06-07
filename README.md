@@ -40,19 +40,12 @@ docker-compose up -d --build
 ```
 
 #### 3. 访问应用
-- 前端：http://localhost:5177/
-- 后端 API：http://localhost:3001/api
+- 应用访问：http://localhost/
 
 #### 4. 查看日志
 ```bash
-# 查看所有服务日志
-docker-compose logs -f
-
-# 查看后端日志
-docker-compose logs -f server
-
-# 查看前端日志
-docker-compose logs -f client
+# 查看服务日志
+docker-compose logs -f app
 ```
 
 #### 5. 停止服务
@@ -111,17 +104,23 @@ npm run start
 ## Docker 说明
 
 ### Docker 相关文件
-- `Dockerfile.server` - 后端 Docker 镜像
-- `Dockerfile.client` - 前端 Docker 镜像
+- `Dockerfile` - 整合前后端的 Docker 镜像
+- `nginx.conf` - Nginx 反向代理配置
+- `start.sh` - 启动脚本
 - `docker-compose.yml` - Docker Compose 配置
 
+### 架构说明
+- 单个 Docker 容器运行
+- Nginx 提供前端静态文件服务
+- Nginx 反向代理 `/api/` 到后端 Node.js 服务
+- Node.js 后端监听 localhost:3001
+
 ### 数据持久化
-- 数据库：Docker Volume `server-data`
-- 上传文件：Docker Volume `server-uploads`
+- 数据库：Docker Volume `app-data`
+- 上传文件：Docker Volume `app-uploads`
 
 ### 网络端口
-- 前端：5177
-- 后端：3001
+- 应用访问：80
 
 ## 项目结构
 
@@ -129,8 +128,9 @@ npm run start
 zcglxt/
 ├── client/          # 前端项目
 ├── server/          # 后端项目
-├── Dockerfile.server
-├── Dockerfile.client
+├── Dockerfile       # 整合 Dockerfile
+├── nginx.conf       # Nginx 配置
+├── start.sh         # 启动脚本
 ├── docker-compose.yml
 ├── .gitignore
 ├── .dockerignore
