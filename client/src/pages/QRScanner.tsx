@@ -205,7 +205,8 @@ export default function QRScanner() {
               <p><span className="font-medium">品类：</span>{asset.category}</p>
               {asset.model && <p><span className="font-medium">型号：</span>{asset.model}</p>}
               <p><span className="font-medium">状态：</span>{asset.status}</p>
-              <p><span className="font-medium">位置：</span>{asset.location || '-'}</p>
+              <p><span className="font-medium">部门：</span>{asset.department || '-'}</p>
+              {asset.address && <p><span className="font-medium">地址：</span>{asset.address}</p>}
             </div>
             
             <div className="mt-4 flex flex-col sm:flex-row gap-2">

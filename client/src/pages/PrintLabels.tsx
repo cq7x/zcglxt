@@ -115,10 +115,6 @@ export default function PrintLabels() {
     }
   }
 
-  function selectAll() {
-    setSelectedIds(assets.map(a => a.id));
-  }
-
   function deselectAll() {
     setSelectedIds([]);
   }
