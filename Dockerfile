@@ -1,77 +1,39 @@
-# 多阶段构建：整合前端和后端
-FROM node:18-slim AS builder
+FROM node:18-bookworm-slim
 
-# 安装构建依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    make \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
-
-# 设置 npm 镜像源（淘宝镜像）
+# 设置 npm 镜像源
 RUN npm config set registry https://registry.npmmirror.com
 
-# 设置工作目录
-WORKDIR /app
-
-# 安装根目录依赖
-COPY package*.json ./
-RUN npm ci
-
-# 1. 构建后端
-WORKDIR /app/server
-COPY server/package*.json ./
-RUN npm ci
-COPY server/ ./
-RUN npm run build
-
-# 2. 构建前端
-WORKDIR /app/client
-COPY client/package*.json ./
-RUN npm ci
-COPY client/ ./
-RUN npm run build
-
-# 3. 生产阶段：使用 Nginx + Node.js
-FROM node:18-slim AS runner
-
-# 安装 Nginx、构建依赖和运行时依赖
+# 安装 Nginx
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
-    python3 \
-    make \
-    g++ \
     && rm -rf /var/lib/apt/lists/*
 
-# 设置 npm 镜像源（淘宝镜像）
-RUN npm config set registry https://registry.npmmirror.com
-
-# 设置工作目录
 WORKDIR /app
 
-# 复制后端构建产物
-COPY --from=builder /app/server/package*.json ./server/
-COPY --from=builder /app/server/dist ./server/dist
-COPY --from=builder /app/server/src ./server/src
+# 复制所有文件
+COPY . .
 
-# 复制前端构建产物
-COPY --from=builder /app/client/dist /usr/share/nginx/html
-
-# 创建数据和上传目录
-RUN mkdir -p /app/server/data /app/server/uploads
-
-# 安装后端生产依赖（带有构建工具）
+# 1. 安装后端依赖并构建
 WORKDIR /app/server
-RUN npm ci --only=production
+RUN npm ci
+RUN npm run build
 
-# 清理构建依赖以减小镜像体积（可选）
-RUN apt-get remove -y --purge python3 make g++ && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+# 2. 安装前端依赖并构建
+WORKDIR /app/client
+RUN npm ci
+RUN npm run build
 
-# 复制 Nginx 配置
+# 3. 复制前端构建产物到 Nginx
+RUN rm -rf /usr/share/nginx/html/*
+RUN cp -r /app/client/dist/* /usr/share/nginx/html/
+
+# 4. 复制 Nginx 配置
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# 复制启动脚本
-COPY start.sh /app/start.sh
+# 5. 创建必要目录
+RUN mkdir -p /app/server/data /app/server/uploads
+
+# 6. 设置启动脚本权限
 RUN chmod +x /app/start.sh
 
 # 暴露端口
