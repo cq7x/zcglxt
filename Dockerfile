@@ -1,6 +1,13 @@
 # 多阶段构建：整合前端和后端
 FROM node:18-slim AS builder
 
+# 安装构建依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
 # 设置工作目录
 WORKDIR /app
 
@@ -25,7 +32,7 @@ RUN npm run build
 # 3. 生产阶段：使用 Nginx + Node.js
 FROM node:18-slim AS runner
 
-# 安装 Nginx
+# 安装 Nginx 和运行时依赖
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
     && rm -rf /var/lib/apt/lists/*
