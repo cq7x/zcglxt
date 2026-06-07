@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # 后端服务
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: zcglxt-server
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - server-data:/app/data
+      - server-uploads:/app/uploads
+    networks:
+      - zcglxt-network
+    environment:
+      - NODE_ENV=production
+
+  # 前端服务
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    container_name: zcglxt-client
+    restart: unless-stopped
+    ports:
+      - "5177:5177"
+    depends_on:
+      - server
+    networks:
+      - zcglxt-network
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  server-data:
+  server-uploads:
+
+networks:
+  zcglxt-network:
+    driver: bridge
