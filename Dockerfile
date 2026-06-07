@@ -1,15 +1,14 @@
-FROM node:18-bookworm-slim
+FROM node:20-alpine3.19
 
 # 设置 npm 镜像源
 RUN npm config set registry https://registry.npmmirror.com
 
 # 安装 Nginx 和构建工具（用于编译 better-sqlite3）
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apk add --no-cache \
     nginx \
     python3 \
     make \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
+    g++
 
 WORKDIR /app
 
