@@ -3,12 +3,13 @@ FROM node:20-alpine3.19
 # 设置 npm 镜像源
 RUN npm config set registry https://registry.npmmirror.com
 
-# 安装 Nginx 和构建工具（用于编译 better-sqlite3）
+# 安装 Nginx、构建工具和 bash
 RUN apk add --no-cache \
     nginx \
     python3 \
     make \
-    g++
+    g++ \
+    bash
 
 WORKDIR /app
 

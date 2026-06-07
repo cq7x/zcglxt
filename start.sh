@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # 创建必要的目录
 mkdir -p /app/server/data /app/server/uploads
