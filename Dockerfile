@@ -35,10 +35,16 @@ RUN npm run build
 # 3. 生产阶段：使用 Nginx + Node.js
 FROM node:18-slim AS runner
 
-# 安装 Nginx 和运行时依赖
+# 安装 Nginx、构建依赖和运行时依赖
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
+    python3 \
+    make \
+    g++ \
     && rm -rf /var/lib/apt/lists/*
+
+# 设置 npm 镜像源（淘宝镜像）
+RUN npm config set registry https://registry.npmmirror.com
 
 # 设置工作目录
 WORKDIR /app
@@ -54,9 +60,12 @@ COPY --from=builder /app/client/dist /usr/share/nginx/html
 # 创建数据和上传目录
 RUN mkdir -p /app/server/data /app/server/uploads
 
-# 安装后端生产依赖
+# 安装后端生产依赖（带有构建工具）
 WORKDIR /app/server
 RUN npm ci --only=production
+
+# 清理构建依赖以减小镜像体积（可选）
+RUN apt-get remove -y --purge python3 make g++ && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
 # 复制 Nginx 配置
 COPY nginx.conf /etc/nginx/nginx.conf
