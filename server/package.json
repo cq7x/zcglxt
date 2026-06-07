@@ -1,0 +1,30 @@
+{
+  "name": "asset-management-server",
+  "version": "1.0.0",
+  "description": "资产管理系统后端API",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^2.1.1",
+    "sharp": "^0.34.5",
+    "uuid": "^9.0.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^20.12.12",
+    "@types/uuid": "^9.0.8",
+    "tsx": "^4.10.3",
+    "typescript": "^5.4.5"
+  }
+}
