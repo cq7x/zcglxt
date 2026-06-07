@@ -9,7 +9,7 @@ services:
     container_name: zcglxt-app
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "13081:80"
     volumes:
       - app-data:/app/server/data
       - app-uploads:/app/server/uploads

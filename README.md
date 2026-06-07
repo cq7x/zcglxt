@@ -40,7 +40,7 @@ docker-compose up -d --build
 ```
 
 #### 3. 访问应用
-- 应用访问：http://localhost/
+- 应用访问：http://localhost:13081/
 
 #### 4. 查看日志
 ```bash
@@ -120,7 +120,7 @@ npm run start
 - 上传文件：Docker Volume `app-uploads`
 
 ### 网络端口
-- 应用访问：80
+- 应用访问：13081
 
 ## 项目结构
 
