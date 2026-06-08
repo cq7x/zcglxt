@@ -3,6 +3,9 @@ FROM node:20-alpine3.19
 # 设置 npm 镜像源
 RUN npm config set registry https://registry.npmmirror.com
 
+# 设置 Alpine 国内镜像源（阿里云）
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+
 # 安装 Nginx、构建工具和 bash
 RUN apk add --no-cache \
     nginx \
