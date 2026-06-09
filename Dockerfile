@@ -6,6 +6,9 @@ RUN npm config set registry https://registry.npmmirror.com
 # 设置 Alpine 国内镜像源（阿里云）
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
+# 设置 node-gyp 镜像源（淘宝镜像）
+ENV NODE_GYP_MIRROR=https://npmmirror.com/mirrors/node
+
 # 安装 Nginx、构建工具和 bash
 RUN apk add --no-cache \
     nginx \
